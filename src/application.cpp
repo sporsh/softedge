@@ -1,18 +1,20 @@
 #include "x11viewportwindow.h"
+#include <stdio.h>
 //#include <boost/thread.hpp>
 
 namespace softedge {
 
 enum State {
-    APP_STATE_STOPPED = 10,
-    APP_STATE_UNINITIALIZED,
+    APP_STATE_STOPPED,
+    APP_STATE_STOPPING,
+    APP_STATE_STARTING,
     APP_STATE_RUNNING
 };
 
 class X11WindowApplication {
 public:
     X11WindowApplication() {
-        state = APP_STATE_UNINITIALIZED;
+        state = APP_STATE_STARTING;
     }
 
     virtual ~X11WindowApplication() {
@@ -24,40 +26,48 @@ public:
         return main(argc, argv);
     }
 
+private:
     virtual int main(int argc, char** argv) {
         Display* display = XOpenDisplay(NULL);
-        if (!display) {
+        if (NULL == display) {
             return 1;
         }
+
         X11ViewportWindow viewport_window(640, 480, "Test Application",
                                           display, 0, 0);
         viewport_window.create();
         viewport_window.show();
-
-        XSelectInput(display, viewport_window.get_handle(),
-                     ButtonPressMask | ButtonReleaseMask);
+        viewport_window.update();
 
         XEvent event;
         while (APP_STATE_RUNNING == state) {
             XNextEvent(display, &event);
             switch (event.type) {
             case ButtonRelease:
-            case KeyPress:
-                state = APP_STATE_STOPPED;
+                viewport_window.update();
+                break;
+            case KeyRelease:
+                state = APP_STATE_STOPPING;
+                break;
+            case ClientMessage:
+                printf("Unhandeled event: %s\n",
+                       XGetAtomName(display, event.xclient.message_type));
                 break;
             default:
+                printf("Unhandeled event: %d\n", event.type);
                 break;
             }
         };
 
-        XCloseDisplay(display);
         viewport_window.destroy();
+        XCloseDisplay(display);
 
         return state;
     }
-private:
+
     State state;
-};
+}
+;
 
 int X11WindowEventHandler(Window window, XEvent event) {
     return 0;
