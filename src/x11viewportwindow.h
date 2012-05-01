@@ -3,6 +3,9 @@
 
 #include "viewportwindow.h"
 #include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/Xatom.h>
+#include <stdlib.h>
 
 namespace softedge {
 
@@ -18,24 +21,44 @@ public:
     }
 
     void create() {
-        int x11_screen = DefaultScreen(display);
-        Window parent = DefaultRootWindow(display);
-        unsigned int border_width = 0;
-        unsigned long border = BlackPixel(display, x11_screen);
-        unsigned long background = WhitePixel(display, x11_screen);
+        data = malloc(width * height * 4 + 1);
 
-        window = XCreateSimpleWindow(display, parent, left, top, width, height,
-                                     border_width, border, background);
+        int screen = DefaultScreen(display);
+        int format = ZPixmap;
+        int bitmap_pad = 32;
+        int bytes_per_line = 0;
+        image = XCreateImage(display, DefaultVisual(display, screen),
+                             XDefaultDepth(display, screen), format, 0,
+                             (char*) data, width, height, bitmap_pad,
+                             bytes_per_line);
+
+        unsigned long border = BlackPixel(display, screen);
+        unsigned long background = WhitePixel(display, screen);
+        window = XCreateSimpleWindow(display, DefaultRootWindow(display), left,
+                                     top, width, height, 0, border,
+                                     background);
+
+        gc = XCreateGC(display, window, 0, NULL);
+
+        XSelectInput(
+                display,
+                window,
+                StructureNotifyMask | ButtonPressMask | ButtonReleaseMask
+                        | KeyReleaseMask);
+
+        Atom wmDeleteMessage = XInternAtom(display, "WM_DELETE_WINDOW", False);
+        XSetWMProtocols(display, window, &wmDeleteMessage, 1);
     }
 
     void destroy() {
+        XFreeGC(display, gc);
         XDestroyWindow(display, window);
+        XDestroyImage(image);
     }
 
     void show() {
         XMapWindow(display, window);
 
-        XSelectInput(display, window, StructureNotifyMask);
         XEvent event;
         do {
             XNextEvent(display, &event);
@@ -44,6 +67,9 @@ public:
     }
 
     void update() {
+        XPutImage(display, window, gc, image, 0, 0, 0, 0, image->width,
+                  image->height);
+        XFlushGC(display, gc);
     }
 
     Window get_handle() const {
@@ -51,9 +77,11 @@ public:
     }
 
 private:
-    Window window;
     Display* display;
-//    XImage* x11_image;
+    void* data;
+    Window window;
+    GC gc;
+    XImage* image;
 };
 
 }  // namespace softedge

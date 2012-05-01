@@ -11,10 +11,6 @@ public:
     virtual ~Viewport() {
     }
 
-    virtual bool on_key_down(unsigned char key) {
-        return true;
-    }
-
 protected:
     unsigned int width;
     unsigned int height;
