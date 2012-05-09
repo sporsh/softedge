@@ -1,3 +1,5 @@
+#include "scene.h"
+#include "renderer.h"
 #include "x11viewportwindow.h"
 #include <stdio.h>
 //#include <boost/thread.hpp>
@@ -33,18 +35,21 @@ private:
             return 1;
         }
 
-        X11ViewportWindow viewport_window(640, 480, "Test Application",
+        Renderer renderer;
+        X11ViewportWindow viewport(640, 480, "Test Application",
                                           display, 0, 0);
-        viewport_window.create();
-        viewport_window.show();
-        viewport_window.update();
+        viewport.create();
+        viewport.show();
+        viewport.update();
 
         XEvent event;
         while (APP_STATE_RUNNING == state) {
             XNextEvent(display, &event);
             switch (event.type) {
             case ButtonRelease:
-                viewport_window.update();
+                printf("RENDER!\n");
+                renderer.render(viewport);
+                viewport.update();
                 break;
             case KeyRelease:
                 state = APP_STATE_STOPPING;
@@ -59,7 +64,7 @@ private:
             }
         };
 
-        viewport_window.destroy();
+        viewport.destroy();
         XCloseDisplay(display);
 
         return state;
