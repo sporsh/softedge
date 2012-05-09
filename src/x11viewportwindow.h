@@ -1,11 +1,11 @@
 #ifndef X11VIEWPORTWINDOW_H_
 #define X11VIEWPORTWINDOW_H_
 
-#include "viewportwindow.h"
+#include <stdlib.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
-#include <stdlib.h>
+#include "viewportwindow.h"
 
 namespace softedge {
 
@@ -21,8 +21,6 @@ public:
     }
 
     void create() {
-        data = malloc(width * height * 4 + 1);
-
         int screen = DefaultScreen(display);
         int format = ZPixmap;
         int bitmap_pad = 32;
@@ -72,13 +70,8 @@ public:
         XFlushGC(display, gc);
     }
 
-    Window get_handle() const {
-        return window;
-    }
-
 private:
     Display* display;
-    void* data;
     Window window;
     GC gc;
     XImage* image;
