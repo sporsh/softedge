@@ -14,10 +14,10 @@ public:
 
     TYPE& operator[](const unsigned int index) const;
 
-    Tuple operator +(const Tuple&) const;
-    Tuple operator -(const Tuple&) const;
-    Tuple operator *(const TYPE) const;
-    Tuple operator /(const TYPE) const;
+    Tuple operator +(const Tuple& tuple) const;
+    Tuple operator -(const Tuple& tuple) const;
+    Tuple operator *(const TYPE scalar) const;
+    Tuple operator /(const TYPE scalar) const;
 
     bool operator==(const Tuple<N, TYPE>& t) const;
 
@@ -72,19 +72,19 @@ Tuple<N, TYPE> Tuple<N, TYPE>::operator -(const Tuple<N, TYPE>& t) const {
 }
 
 template<int N, typename TYPE>
-Tuple<N, TYPE> Tuple<N, TYPE>::operator *(const TYPE t) const {
+Tuple<N, TYPE> Tuple<N, TYPE>::operator *(const TYPE scalar) const {
     Tuple<N, TYPE> tuple(*this);
     for (int n = 0; n < N; n++) {
-        tuple.tuple[n] *= t;
+        tuple.tuple[n] *= scalar;
     }
     return tuple;
 }
 
 template<int N, typename TYPE>
-Tuple<N, TYPE> Tuple<N, TYPE>::operator /(const TYPE t) const {
+Tuple<N, TYPE> Tuple<N, TYPE>::operator /(const TYPE scalar) const {
     Tuple<N, TYPE> tuple(*this);
     for (int n = 0; n < N; n++) {
-        tuple.tuple[n] /= t.tuple[n];
+        tuple.tuple[n] /= scalar;
     }
     return tuple;
 }
