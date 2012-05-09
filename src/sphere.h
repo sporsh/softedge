@@ -13,7 +13,7 @@ public:
 
 //    friend int intersect(Ray& ray, Sphere& sphere);
 
-private:
+public:
     Vector origin;
     real radius;
 };

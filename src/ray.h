@@ -9,7 +9,7 @@ class Ray {
 public:
     Ray(Vector origin, Vector direction);
 
-private:
+//private:
     Vector origin;
     Vector direction;
 };
