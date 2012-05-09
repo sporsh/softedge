@@ -6,11 +6,12 @@
 namespace softedge {
 
 class Viewport;
+class Scene;
 
 class Renderer {
 public:
     Renderer();
-    void render(Viewport& viewport) const;
+    void render(Viewport& viewport, const Scene& scene) const;
 };
 
 }  // namespace softedge

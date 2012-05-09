@@ -1,6 +1,6 @@
-#include "scene.h"
-#include "renderer.h"
 #include "x11viewportwindow.h"
+#include "renderer.h"
+#include "scene.h"
 #include <stdio.h>
 //#include <boost/thread.hpp>
 
@@ -35,9 +35,11 @@ private:
             return 1;
         }
 
+        Scene scene(Vector(0, 0, 0), Sphere(Vector(200, 150, 100), 50));
+
         Renderer renderer;
-        X11ViewportWindow viewport(640, 480, "Test Application",
-                                          display, 0, 0);
+        X11ViewportWindow viewport(640, 480, "Test Application", display, 0,
+                                   0);
         viewport.create();
         viewport.show();
         viewport.update();
@@ -47,8 +49,17 @@ private:
             XNextEvent(display, &event);
             switch (event.type) {
             case ButtonRelease:
-                printf("RENDER!\n");
-                renderer.render(viewport);
+                switch (event.xbutton.button) {
+                case 1:
+                    scene.light.x = event.xbutton.x;
+                    scene.light.y = event.xbutton.y;
+                    break;
+                case 3:
+                    scene.sphere.origin.x = event.xbutton.x;
+                    scene.sphere.origin.y = event.xbutton.y;
+                    break;
+                }
+                renderer.render(viewport, scene);
                 viewport.update();
                 break;
             case KeyRelease:
