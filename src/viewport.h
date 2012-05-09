@@ -12,7 +12,8 @@ public:
 
     unsigned int get_width() const;
     unsigned int get_height() const;
-    virtual void set_pixel(unsigned int x, unsigned int y, Color& color) const;
+    virtual void set_pixel(const unsigned int x, const unsigned int y,
+                           const Color& color) const;
 
 protected:
     unsigned int width;

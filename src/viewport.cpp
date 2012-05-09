@@ -20,7 +20,8 @@ unsigned int Viewport::get_height() const {
     return height;
 }
 
-void Viewport::set_pixel(unsigned int x, unsigned int y, Color& color) const {
+void Viewport::set_pixel(unsigned int x, unsigned int y,
+                         const Color& color) const {
     unsigned int i = (y * width + x);
     data[i] = color;
 }
