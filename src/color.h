@@ -2,16 +2,24 @@
 #define COLOR_H_
 
 #include "real.h"
+#include "tuple.h"
 
 namespace softedge {
 
-class Color {
+class Color: public Tuple<3, real> {
 public:
-    Color(real red, real green, real blue);
-    operator unsigned int() const;
+    real& r;
+    real& g;
+    real& b;
 
-private:
-    real red, green, blue;
+    Color();
+    Color(const Tuple<3, real>& tuple);
+    Color(const Color& color);
+    Color(const real red, const real green, const real blue);
+
+    Color& operator =(const Color&);
+
+    operator unsigned int() const;
 };
 
 }  // namespace softedge
