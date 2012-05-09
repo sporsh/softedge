@@ -32,7 +32,7 @@ real intersect(Ray ray, Sphere sphere) {
     }
 }
 
-Color brdf(Vector in, Vector n) {
+Color lambert_brdf(Vector in, Vector n) {
     real i = dot(in, n);
     Color color(.7, .7, .99);
     if (i < 0) {
@@ -44,6 +44,8 @@ Color brdf(Vector in, Vector n) {
 
 Renderer::Renderer() {
 }
+
+Color ambient(.1, .1, .1);
 
 void Renderer::render(Viewport& viewport, const Scene& scene) const {
     unsigned int width = viewport.get_width();
@@ -58,11 +60,11 @@ void Renderer::render(Viewport& viewport, const Scene& scene) const {
                 Vector point_on_sphere = Vector(x, y, t);
                 Vector in(point_on_sphere - scene.light);
                 Vector n(scene.sphere.origin - point_on_sphere);
-                Color color(brdf(normalize(in), normalize(n)));
+                Color lambert(lambert_brdf(normalize(in), normalize(n)));
+                Color color(lambert + ambient);
                 viewport.set_pixel(x, y, color);
             } else {
-                Color color(0, 0, 0);
-                viewport.set_pixel(x, y, color);
+                viewport.set_pixel(x, y, ambient / 2.0);
             }
         }
     }
