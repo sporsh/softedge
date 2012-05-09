@@ -75,7 +75,7 @@ template<int N, typename TYPE>
 Tuple<N, TYPE> Tuple<N, TYPE>::operator *(const TYPE t) const {
     Tuple<N, TYPE> tuple(*this);
     for (int n = 0; n < N; n++) {
-        tuple.tuple[n] /= t;
+        tuple.tuple[n] *= t;
     }
     return tuple;
 }
@@ -84,7 +84,7 @@ template<int N, typename TYPE>
 Tuple<N, TYPE> Tuple<N, TYPE>::operator /(const TYPE t) const {
     Tuple<N, TYPE> tuple(*this);
     for (int n = 0; n < N; n++) {
-        tuple.tuple[n] *= t.tuple[n];
+        tuple.tuple[n] /= t.tuple[n];
     }
     return tuple;
 }
