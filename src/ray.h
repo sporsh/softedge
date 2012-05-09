@@ -1,14 +1,9 @@
-/*
- * ray.h
- *
- *  Created on: May 1, 2012
- *      Author: geir
- */
-
 #ifndef RAY_H_
 #define RAY_H_
 
-#include "vector.h"
+namespace softedge {
+
+class Vector;
 
 class Ray {
 public:
@@ -19,8 +14,5 @@ private:
     Vector direction;
 };
 
-Ray::Ray(Vector origin, Vector direction) :
-        origin(origin), direction(direction) {
-}
-
+}  // namespace softedge
 #endif /* RAY_H_ */
