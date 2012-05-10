@@ -1,10 +1,10 @@
-#include "vector.h"
+#include "vector3.h"
 #include "ray.h"
 #include "sphere.h"
 
 namespace softedge {
 
-Sphere::Sphere(Vector origin, real radius) :
+Sphere::Sphere(Vector3 origin, real radius) :
         origin(origin), radius(radius) {
 
 }

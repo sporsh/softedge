@@ -5,16 +5,16 @@
 
 namespace softedge {
 
-class Vector;
+class Vector3;
 
 class Sphere {
 public:
-    Sphere(Vector origin, real radius);
+    Sphere(Vector3 origin, real radius);
 
 //    friend int intersect(Ray& ray, Sphere& sphere);
 
 public:
-    Vector origin;
+    Vector3 origin;
     real radius;
 };
 

@@ -35,7 +35,7 @@ private:
             return 1;
         }
 
-        Scene scene(Vector(0, 0, 0), Sphere(Vector(200, 150, 100), 50));
+        Scene scene(Vector3(0, 0, 100), Sphere(Vector3(200, 150, 200), 100));
 
         Renderer renderer;
         X11ViewportWindow viewport(640, 480, "Test Application", display, 0,

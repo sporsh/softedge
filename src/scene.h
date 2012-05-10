@@ -1,18 +1,18 @@
 #ifndef SCENE_H_
 #define SCENE_H_
 
-#include "vector.h"
+#include "vector3.h"
 #include "sphere.h"
 
 namespace softedge {
 
 class Scene {
 public:
-    Scene(Vector light, Sphere sphere) :
+    Scene(Vector3 light, Sphere sphere) :
             light(light), sphere(sphere) {
     }
 
-    Vector light;
+    Vector3 light;
     Sphere sphere;
 };
 

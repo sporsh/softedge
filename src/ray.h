@@ -3,15 +3,15 @@
 
 namespace softedge {
 
-class Vector;
+class Vector3;
 
 class Ray {
 public:
-    Ray(Vector origin, Vector direction);
+    Ray(Vector3 origin, Vector3 direction);
 
 //private:
-    Vector origin;
-    Vector direction;
+    Vector3 origin;
+    Vector3 direction;
 };
 
 }  // namespace softedge
