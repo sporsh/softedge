@@ -1,4 +1,5 @@
 #include "x11viewportwindow.h"
+#include "point3.h"
 #include "renderer.h"
 #include "scene.h"
 #include <stdio.h>
@@ -35,7 +36,8 @@ private:
             return 1;
         }
 
-        Scene scene(Vector3(0, 0, 100), Sphere(Vector3(200, 150, 200), 100));
+        real z = 200;
+        Scene scene(Vector3(0, 0, 0), Sphere(Point3(200, 150, z), z));
 
         Renderer renderer;
         X11ViewportWindow viewport(640, 480, "Test Application", display, 0,
@@ -55,8 +57,8 @@ private:
                     scene.light.y = event.xbutton.y;
                     break;
                 case 3:
-                    scene.sphere.origin.x = event.xbutton.x;
-                    scene.sphere.origin.y = event.xbutton.y;
+                    scene.sphere.move(
+                            Point3(event.xbutton.x, event.xbutton.y, z));
                     break;
                 }
                 renderer.render(viewport, scene);

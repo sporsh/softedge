@@ -13,6 +13,8 @@ public:
     Sphere(Point3 origin, real radius);
 
     void move(Point3 point);
+    bool intersect(const Point3 origin, const Vector3 direction, real* t,
+                   Vector3* normal) const;
 
 private:
     Point3 origin;
