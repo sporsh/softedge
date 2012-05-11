@@ -2,6 +2,8 @@
 #include "tuple.h"
 #include "color.h"
 
+#include <algorithm>
+
 namespace softedge {
 
 Color::Color() :
@@ -44,9 +46,9 @@ Color::operator unsigned int() const {
         unsigned int color;
     };
     comp.a = 0xff;
-    comp.r = 0xff * r;
-    comp.g = 0xff * g;
-    comp.b = 0xff * b;
+    comp.r = std::min(0xff, (int) (0xff * r));
+    comp.g = std::min(0xff, (int) (0xff * g));
+    comp.b = std::min(0xff, (int) (0xff * b));
     return color;
 }
 
