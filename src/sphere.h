@@ -1,6 +1,7 @@
 #ifndef SPHERE_H_
 #define SPHERE_H_
 
+#include "point3.h"
 #include "real.h"
 
 namespace softedge {
@@ -9,12 +10,12 @@ class Vector3;
 
 class Sphere {
 public:
-    Sphere(Vector3 origin, real radius);
+    Sphere(Point3 origin, real radius);
 
-//    friend int intersect(Ray& ray, Sphere& sphere);
+    void move(Point3 point);
 
-public:
-    Vector3 origin;
+private:
+    Point3 origin;
     real radius;
 };
 
