@@ -1,5 +1,6 @@
 #include "point3.h"
 #include "vector3.h"
+#include "ray3.h"
 #include "sphere.h"
 
 #include <math.h>
@@ -10,16 +11,10 @@ Sphere::Sphere(Point3 origin, real radius) :
         origin(origin), radius(radius) {
 }
 
-void Sphere::move(Point3 point) {
-    origin = point;
-}
-
-
-bool Sphere::intersect(const Point3 point, const Vector3 direction, real* t,
-                       Vector3* normal) const {
-    Vector3 c(origin - point);
-    real d = dot(direction, c);
-    real incidence = d * d - dot(c, c) + radius * radius;
+bool Sphere::intersect(const Ray3& ray, real* t, Vector3* normal) const {
+    Vector3 diff(origin - ray.point);
+    real d = dot(ray.direction, diff);
+    real incidence = d * d - dot(diff, diff) + radius * radius;
     if (incidence > .0) {
         real s = sqrt(incidence);
         if (s < 0) {
@@ -34,7 +29,7 @@ bool Sphere::intersect(const Point3 point, const Vector3 direction, real* t,
             *t = d;
         }
         if (normal) {
-            *normal = normalize(origin - (point + (direction * d)));
+            *normal = normalize(origin - (ray.point + (ray.direction * d)));
         }
         return true;
     } else {
@@ -42,4 +37,4 @@ bool Sphere::intersect(const Point3 point, const Vector3 direction, real* t,
     }
 }
 
-}// namespace softedge
+} // namespace softedge
