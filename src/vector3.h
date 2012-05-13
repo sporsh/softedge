@@ -21,6 +21,7 @@ public:
 };
 
 real dot(const Vector3& A, const Vector3& B);
+Vector3 cross(const Vector3& A, const Vector3& B);
 real length(const Vector3& v);
 Vector3 normalize(const Vector3& v);
 Vector3 resize(const Vector3& v, const real length);

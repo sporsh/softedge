@@ -36,6 +36,12 @@ real dot(const Vector3& A, const Vector3& B) {
     return (A.x * B.x) + (A.y * B.y) + (A.z * B.z);
 }
 
+Vector3 cross(const Vector3& A, const Vector3& B) {
+    return Vector3(A.y * B.z - A.z * B.y,
+                   A.z * B.x - A.x * B.z,
+                   A.x * B.y - A.y * B.x);
+}
+
 real length(const Vector3& v) {
     return sqrt((v.x * v.x) + (v.y * v.y) + (v.z * v.z));
 }
