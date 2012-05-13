@@ -1,26 +1,26 @@
 #ifndef X11VIEWPORTWINDOW_H_
 #define X11VIEWPORTWINDOW_H_
 
+#include "viewportwindow.h"
+#include "color.h"
+
 #include <stdlib.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
-#include "viewportwindow.h"
 
 namespace softedge {
 
 class X11ViewportWindow: public ViewportWindow {
 public:
+    X11ViewportWindow(X11ViewportWindow& viewport) : ViewportWindow(viewport){
+    }
+
     X11ViewportWindow(const unsigned int width, const unsigned int height,
                       const char* title, Display* display, const int left,
                       const int top) :
             ViewportWindow(width, height, title, left, top), display(display) {
-    }
-
-    virtual ~X11ViewportWindow() {
-    }
-
-    void create() {
+        data = new unsigned int[width * height];
         int screen = DefaultScreen(display);
         int format = ZPixmap;
         int bitmap_pad = 32;
@@ -48,10 +48,11 @@ public:
         XSetWMProtocols(display, window, &wmDeleteMessage, 1);
     }
 
-    void destroy() {
+    virtual ~X11ViewportWindow() {
         XFreeGC(display, gc);
         XDestroyWindow(display, window);
         XDestroyImage(image);
+        delete[] data;
     }
 
     void show() {
@@ -70,7 +71,13 @@ public:
         XFlushGC(display, gc);
     }
 
+    inline void set_pixel(unsigned int x, unsigned int y, const Color& color) const {
+        unsigned int i = (y * width + x);
+        data[i] = color;
+    }
+
 private:
+    unsigned int* data;
     Display* display;
     Window window;
     GC gc;
