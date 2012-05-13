@@ -1,7 +1,9 @@
 #include "x11viewportwindow.h"
-#include "point3.h"
 #include "renderer.h"
-#include "scene.h"
+#include "vector3.h"
+#include "point3.h"
+#include "sphere.h"
+#include "plane3.h"
 #include <stdio.h>
 //#include <boost/thread.hpp>
 
@@ -36,8 +38,11 @@ private:
             return 1;
         }
 
-        real z = 200;
-        Scene scene(Vector3(0, 0, 0), Sphere(Point3(200, 150, z), z));
+        Vector3 light(0, 0, 0);
+        Sphere sphere(Point3(640 / 2, 480 / 2, 400), 300);
+        Plane3 plane(Point3(640 / 2, 480 / 2, 0),
+                     normalize(Vector3(-1, -1, -1)));
+        Geometric3* geometry = &plane;
 
         Renderer renderer;
         X11ViewportWindow viewport(640, 480, "Test Application", display, 0,
@@ -53,15 +58,15 @@ private:
             case ButtonRelease:
                 switch (event.xbutton.button) {
                 case 1:
-                    scene.light.x = event.xbutton.x;
-                    scene.light.y = event.xbutton.y;
+                    light.x = event.xbutton.x;
+                    light.y = event.xbutton.y;
                     break;
                 case 3:
-                    scene.sphere.move(
-                            Point3(event.xbutton.x, event.xbutton.y, z));
+                    sphere.origin.x = event.xbutton.x;
+                    sphere.origin.y = event.xbutton.y;
                     break;
                 }
-                renderer.render(viewport, scene);
+                renderer.render(viewport, geometry, &light);
                 viewport.update();
                 break;
             case KeyRelease:
