@@ -4,8 +4,10 @@
 #include "point3.h"
 #include "sphere.h"
 #include "plane3.h"
+
 #include <stdio.h>
 //#include <boost/thread.hpp>
+#include <assert.h>
 
 namespace softedge {
 
@@ -19,25 +21,25 @@ enum State {
 class X11WindowApplication {
 public:
     X11WindowApplication() {
+        display = XOpenDisplay(NULL);
+        assert(display != NULL);
         state = APP_STATE_STARTING;
     }
 
     virtual ~X11WindowApplication() {
+        XCloseDisplay(display);
         state = APP_STATE_STOPPED;
     }
 
-    virtual int run(int argc, char** argv) {
+    virtual int run(int argc, char* argv[]) {
         state = APP_STATE_RUNNING;
         return main(argc, argv);
     }
 
 private:
-    virtual int main(int argc, char** argv) {
-        Display* display = XOpenDisplay(NULL);
-        if (NULL == display) {
-            return 1;
-        }
+    Display* display;
 
+    virtual int main(int argc, char* argv[]) {
         Vector3 light(0, 0, 0);
         Sphere sphere(Point3(640 / 2, 480 / 2, 400), 300);
         Plane3 plane(Point3(640 / 2, 480 / 2, 0),
@@ -47,7 +49,6 @@ private:
         Renderer renderer;
         X11ViewportWindow viewport(640, 480, "Test Application", display, 0,
                                    0);
-        viewport.create();
         viewport.show();
         viewport.update();
 
@@ -81,16 +82,10 @@ private:
                 break;
             }
         };
-
-        viewport.destroy();
-        XCloseDisplay(display);
-
         return state;
     }
-
     State state;
-}
-;
+};
 
 int X11WindowEventHandler(Window window, XEvent event) {
     return 0;
@@ -100,7 +95,7 @@ int X11WindowEventHandler(Window window, XEvent event) {
 
 using namespace softedge;
 
-int main(int argc, char** argv) {
+int main(int argc, char* argv[]) {
     X11WindowApplication application;
     int exit_status = application.run(argc, argv);
     return exit_status;
