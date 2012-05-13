@@ -1,9 +1,10 @@
+#include "renderer.h"
+
 #include "viewport.h"
 #include "color.h"
 #include "vector3.h"
-#include "sphere.h"
-#include "scene.h"
-#include "renderer.h"
+#include "ray3.h"
+#include "geometric3.h"
 
 namespace softedge {
 
@@ -26,22 +27,18 @@ Color (*shade)(const Vector3&, const Vector3&) = &lambert_shade;
 Renderer::Renderer() {
 }
 
-void Renderer::render(Viewport& viewport, const Scene& scene) const {
-    Sphere sphere = scene.sphere;
+void Renderer::render(Viewport& viewport, const Geometric3* geometry,
+                      const Vector3* light) const {
     unsigned int width = viewport.get_width();
     unsigned int height = viewport.get_height();
     for (unsigned int y = 0; y < height; y++) {
         for (unsigned int x = 0; x < width; x++) {
-            static real t;
-            static Vector3 normal;
-            if (sphere.intersect(Point3(x, y, 0), Vector3(0, 0, 1), &t,
-                                 &normal)) {
+            Ray3 ray(Point3(x, y, 0), Vector3(0, 0, 1));
+            real t;
+            Vector3 n;
+            if (geometry->intersect(ray, &t, &n)) {
                 viewport.set_pixel(
-                        x,
-                        y,
-                        shade(normal,
-                              normalize(Vector3(x, y, t) - scene.light)));
-            } else {
+                        x, y, shade(n, normalize(Vector3(x, y, t) - *light)));
             }
         }
     }
