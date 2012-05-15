@@ -2,6 +2,7 @@
 
 #include "viewport.h"
 #include "color.h"
+#include "camera.h"
 #include "vector3.h"
 #include "ray3.h"
 #include "geometric3.h"
@@ -27,18 +28,18 @@ Color (*shade)(const Vector3&, const Vector3&) = &lambert_shade;
 Renderer::Renderer() {
 }
 
-void Renderer::render(Viewport& viewport, const Geometric3* geometry,
-                      const Vector3* light) const {
+void Renderer::render(Viewport& viewport, const Camera& camera,
+                      const Geometric3* geometry, const Vector3* light) const {
     unsigned int width = viewport.get_width();
     unsigned int height = viewport.get_height();
     for (unsigned int y = 0; y < height; y++) {
         for (unsigned int x = 0; x < width; x++) {
-            Ray3 ray(Point3(x, y, 0), Vector3(0, 0, 1));
+            Ray3 ray(Point3(x, y, -1000), camera.direction);
             real t;
             Vector3 n;
             if (geometry->intersect(ray, &t, &n)) {
-                viewport.set_pixel(
-                        x, y, shade(n, normalize(Vector3(x, y, t) - *light)));
+                Point3 p = ray.point + (ray.direction * t);
+                viewport.set_pixel(x, y, shade(n, normalize(*light - p)));
             }
         }
     }

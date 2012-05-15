@@ -6,14 +6,15 @@
 namespace softedge {
 
 class Viewport;
+class Camera;
 class Geometric3;
 class Vector3;
 
 class Renderer {
 public:
     Renderer();
-    void render(Viewport& viewport, const Geometric3* geometry,
-                const Vector3* light) const;
+    void render(Viewport& viewport, const Camera& camera,
+                const Geometric3* geometry, const Vector3* light) const;
 };
 
 }  // namespace softedge
