@@ -1,15 +1,48 @@
 #include "x11viewportwindow.h"
 #include "renderer.h"
+#include "camera.h"
+#include "ray3.h"
 #include "vector3.h"
 #include "point3.h"
-#include "sphere.h"
+#include "geometric3.h"
+#include "triangle3.h"
 #include "plane3.h"
+#include "sphere.h"
 
-#include <stdio.h>
-//#include <boost/thread.hpp>
 #include <assert.h>
+#include <stdio.h>
+#include <vector>
+#include <algorithm>
+
+//#include <boost/thread.hpp>
 
 namespace softedge {
+
+class GeometrySoup: public Geometric3 {
+public:
+    GeometrySoup(std::vector<Geometric3*> objects) :
+            objects(objects) {
+    }
+
+    bool intersect(const Ray3& ray, real* final_t, Vector3* final_n) const {
+        real hit = false;
+        for (unsigned int i = 0; i < objects.size(); ++i) {
+            real t;
+            Vector3 n;
+            if (objects[i]->intersect(ray, &t, &n)) {
+                if (!hit || t < *final_t) {
+                    *final_t = t;
+                    *final_n = n;
+                }
+                hit = true;
+            }
+        }
+        return hit;
+    }
+
+private:
+    std::vector<Geometric3*> objects;
+};
 
 enum State {
     APP_STATE_STOPPED,
@@ -40,11 +73,34 @@ private:
     Display* display;
 
     virtual int main(int argc, char* argv[]) {
-        Vector3 light(0, 0, 0);
-        Sphere sphere(Point3(640 / 2, 480 / 2, 400), 300);
-        Plane3 plane(Point3(640 / 2, 480 / 2, 0),
-                     normalize(Vector3(-1, -1, -1)));
-        Geometric3* geometry = &plane;
+        Camera camera(Point3(0, -1000, 0), Vector3(0, 0, 1));
+        Vector3 light(320, 120, 50);
+        Sphere sphere1(Point3(640 / 2, 480 / 2, 400), 200);
+        Sphere sphere2(Point3(640, 480, 500), 250);
+        Sphere sphere3(Point3(100, 100, 400), 100);
+        Plane3 plane1(normalize(Vector3(5, 0, -1)), 0);
+        Plane3 plane2(normalize(Vector3(-5, 0, -1)), -640);
+        Plane3 plane3(normalize(Vector3(0, 0, -1)), -1000);
+        Triangle3 triangle1(Point3(100, 100, 400),
+                           Point3(100, 400, 400),
+                           Point3(400, 100, 100));
+        Triangle3 triangle2(Point3(100, 400, 400),
+                           Point3(200, 550, 800),
+                           Point3(400, 100, 100));
+
+        std::vector<Geometric3*> objects;
+        objects.push_back(&sphere1);
+        objects.push_back(&sphere2);
+        objects.push_back(&sphere3);
+        objects.push_back(&plane1);
+        objects.push_back(&plane2);
+        objects.push_back(&plane3);
+        objects.push_back(&triangle1);
+        objects.push_back(&triangle2);
+
+        GeometrySoup scene(objects);
+
+        Geometric3* geometry = &scene;
 
         Renderer renderer;
         X11ViewportWindow viewport(640, 480, "Test Application", display, 0,
@@ -63,11 +119,11 @@ private:
                     light.y = event.xbutton.y;
                     break;
                 case 3:
-                    sphere.origin.x = event.xbutton.x;
-                    sphere.origin.y = event.xbutton.y;
+                    sphere1.origin.x = event.xbutton.x;
+                    sphere1.origin.y = event.xbutton.y;
                     break;
                 }
-                renderer.render(viewport, geometry, &light);
+                renderer.render(viewport, camera, geometry, &light);
                 viewport.update();
                 break;
             case KeyRelease:
