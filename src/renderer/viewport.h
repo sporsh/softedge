@@ -11,8 +11,8 @@ public:
     Viewport(const unsigned int width, const unsigned int height);
     virtual ~Viewport();
 
-    unsigned int get_width() const;
-    unsigned int get_height() const;
+    void get_metrics(unsigned int& width, unsigned int& height) const;
+
     virtual void set_pixel(const unsigned int x, const unsigned int y,
                            const Color& color) const = 0;
 

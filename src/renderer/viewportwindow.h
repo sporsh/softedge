@@ -8,12 +8,15 @@ namespace softedge {
 class ViewportWindow: public Viewport {
 public:
     ViewportWindow(const unsigned int width, const unsigned int height,
-                   const char* title, const int left, const int top) :
-            Viewport(width, height), title(title), left(left), top(top) {
-    }
+                   const char* title, const int left, const int top);
 
-    virtual ~ViewportWindow() {
-    }
+    virtual ~ViewportWindow();
+
+    void get_metrics(unsigned int& width, unsigned int& height,
+                             int& left, int& top) const;
+
+    virtual void show() = 0;
+    virtual void update() = 0;
 
 protected:
     const char* title;

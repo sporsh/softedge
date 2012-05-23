@@ -12,12 +12,9 @@ Viewport::Viewport(const unsigned int width, const unsigned int height) :
 Viewport::~Viewport() {
 }
 
-unsigned int Viewport::get_width() const {
-    return width;
-}
-
-unsigned int Viewport::get_height() const {
-    return height;
+void Viewport::get_metrics(unsigned int& width, unsigned int& height) const {
+    width = this->width;
+    height = this->height;
 }
 
 } /* namespace softedge */
