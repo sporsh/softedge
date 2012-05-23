@@ -23,3 +23,4 @@ bool Sphere::intersect(const Ray3& ray, real* t, Vector3* normal) const {
     return true;
 }
 
+}// namespace softedge
