@@ -1,20 +1,20 @@
 #ifndef RENDERER_H_
 #define RENDERER_H_
 
+#include "renderable.h"
+
 #include "real.h"
 
 namespace softedge {
-
-class Viewport;
-class Camera;
 class Geometric3;
-class Vector3;
+}  // namespace softedge
+
+namespace softedge {
 
 class Renderer {
 public:
     Renderer();
-    void render(Viewport& viewport, const Camera& camera,
-                const Geometric3* geometry, const Vector3* light) const;
+    virtual ~Renderer();
 };
 
 }  // namespace softedge
