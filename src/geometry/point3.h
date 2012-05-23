@@ -14,7 +14,7 @@ public:
 
     Point3();
     Point3(const Tuple<3, real>& tuple);
-    Point3(const Point3& vector);
+    Point3(const Point3& point);
     Point3(real x, real y, real z);
 
     Point3& operator =(const Point3&);
