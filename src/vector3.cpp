@@ -54,4 +54,9 @@ Vector3 resize(const Vector3& v, const real s) {
     return v * (s / length(v));
 }
 
+const Vector3 Vector3::X(1, 0, 0);
+const Vector3 Vector3::Y(0, 1, 0);
+const Vector3 Vector3::Z(0, 0, 1);
+const Vector3 Vector3::ZERO(0, 0, 0);
+
 }  // namespace softedge

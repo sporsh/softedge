@@ -18,6 +18,9 @@ public:
     Vector3(real x, real y, real z);
 
     Vector3& operator =(const Vector3&);
+
+public:
+    static const Vector3 X, Y, Z, ZERO;
 };
 
 real dot(const Vector3& A, const Vector3& B);
