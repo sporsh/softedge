@@ -2,7 +2,7 @@
 
 namespace softedge {
 
-Geometric3::Geometric3() {
+Geometric3::Geometric3(GeometricType type) : type(type) {
 }
 
 Geometric3::~Geometric3() {

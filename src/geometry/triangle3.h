@@ -20,7 +20,7 @@ public:
 
     virtual bool intersect(const Ray3& ray, real* t, Vector3* normal) const;
 
-private:
+//private:
     Triangle3();
     Plane3 plane;
 };

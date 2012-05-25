@@ -13,6 +13,7 @@ class Ray3;
 class Sphere: public Geometric3 {
 public:
     Sphere(Point3 origin, real radius);
+
     bool intersect(const Ray3& ray, real* t, Vector3* normal) const;
 
     Point3 origin;

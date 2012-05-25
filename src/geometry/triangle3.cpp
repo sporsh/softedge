@@ -13,7 +13,7 @@ namespace softedge {
 //}
 
 Triangle3::Triangle3(const Point3& A, const Point3& B, const Point3& C) :
-        a(A), b(B), c(C), plane(Plane3(A, B, C)) {
+        Geometric3(TRIANGLE), a(A), b(B), c(C), plane(Plane3(A, B, C)) {
 }
 
 Triangle3::~Triangle3() {
@@ -22,7 +22,7 @@ Triangle3::~Triangle3() {
 bool Triangle3::intersect(const Ray3& ray, real* t, Vector3* normal) const {
     Vector3 ab = b - a;
     Vector3 ac = c - a;
-    Vector3 qp = normalize(ray.direction*-1);
+    Vector3 qp = normalize(ray.direction * -1);
 
     Vector3 n = plane.normal;
 
