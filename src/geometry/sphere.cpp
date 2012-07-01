@@ -12,6 +12,10 @@ Sphere::Sphere(Point3 origin, real radius) :
         Geometric(), origin(origin), radius(radius) {
 }
 
+void Sphere::accept(Visitor& visitor) {
+    visitor.visit(*this);
+}
+
 bool Sphere::intersect(const Ray3& ray, real* t, Vector3* normal) const {
     Vector3 dist = origin - ray.point;
     real B = dot(ray.direction, dist);

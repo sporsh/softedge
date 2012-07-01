@@ -2,17 +2,37 @@
 #define X11RENDERER_H_
 
 #include "renderer.h"
+#include "geometry/geometric.h"
+#include "vector3.h"
 
 #include <X11/Xlib.h>
 
 namespace softedge {
 
+
 class X11ViewportWindow;
 class Camera;
-class Vector3;
-class Triangle3;
+
 class Geometric;
 class Sphere;
+class Triangle3;
+class Plane3;
+
+
+class X11Rasterizer: public Visitor {
+public:
+    X11Rasterizer();
+    virtual ~X11Rasterizer();
+
+    virtual void visit(Plane3& plane);
+    virtual void visit(Triangle3& triangle);
+    virtual void visit(Sphere& sphere);
+
+    void set_color(Color& color);
+
+    Vector3 light;
+    X11ViewportWindow* viewport;
+};
 
 class X11Renderer: public Renderer {
 public:
@@ -20,13 +40,10 @@ public:
     virtual ~X11Renderer();
 
     void render(X11ViewportWindow& viewport, const Camera& camera,
-                const Geometric3* geometry, const Vector3& light);
+                        const Scene& scene);
 
-    void render(const Geometric3& renderable, const Vector3& light);
-    void draw(const Triangle3& triangle, const Vector3& light);
-    void draw(const Sphere& sphere);
 private:
-    X11ViewportWindow* viewport;
+    X11Rasterizer rasterizer;
 };
 
 }  // namespace softedge

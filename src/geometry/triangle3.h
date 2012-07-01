@@ -20,6 +20,8 @@ public:
 
     virtual bool intersect(const Ray3& ray, real* t, Vector3* normal) const;
 
+    virtual void accept(Visitor& visitor);
+
 //private:
     Triangle3();
     Plane3 plane;

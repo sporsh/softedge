@@ -22,6 +22,10 @@ Plane3::Plane3(Point3 a, Point3 b, Point3 c) :
 
 }
 
+void Plane3::accept(Visitor& visitor) {
+    visitor.visit(*this);
+}
+
 bool Plane3::intersect(const Ray3& ray, real* t, Vector3* normal) const {
     real NdD = dot(this->normal, ray.direction);
     if (NdD == 0) {

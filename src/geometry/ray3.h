@@ -2,6 +2,7 @@
 #define RAY3_H_
 
 #include "point3.h"
+#include "vector3.h"
 
 namespace softedge {
 

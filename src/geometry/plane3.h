@@ -19,6 +19,7 @@ public:
     Plane3(Point3 p1, Point3 p2, Point3 p3);
 
     bool intersect(const Ray3& ray, real* t, Vector3* normal) const;
+    virtual void accept(Visitor& visitor);
 
     Vector3 normal;
     real d;

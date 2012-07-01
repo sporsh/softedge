@@ -1,3 +1,4 @@
+#include "scene.h"
 #include "raytracerenderer.h"
 #include "viewport.h"
 #include "color.h"
@@ -5,46 +6,94 @@
 #include "geometry/ray3.h"
 #include "camera.h"
 #include "geometry/geometric.h"
+#include "geometry/sphere.h"
+#include "geometry/triangle3.h"
+
+#include <math.h>
 
 namespace softedge {
 
-static Color normal_shade(const Vector3& normal, const Vector3&) {
+static Color normal_shade(const Vector3& normal, const Color&,
+                          const Vector3&) {
     return Color(normalize(Vector3(1, 1, 1) - normal));
 }
 
-static Color lambert_shade(const Vector3& normal, const Vector3& in) {
-    static Color ambient(.1, .1, .15);
+static Color lambert_shade(const Vector3& normal, const Color& color,
+                           const Vector3& in) {
+    Color ambient(.1, .1, .2);
+//    Color color(1.0, .5, .5);
     real i = dot(in, normal);
-    if (i < 0) {
+    if (i < .0) {
         return ambient;
-    } else {
-        return ambient + Color(.7, .7, .99) * i;
+    }
+    return ambient + color * i;
+}
+
+static Color (*shade)(const Vector3&, const Color& color,
+                      const Vector3&) = &lambert_shade;
+
+RayCaster::RayCaster(const Ray3& ray) :
+        ray(ray), intersector(RayIntersector(ray, true)), color(0) {
+}
+
+void RayCaster::visit(Plane3& plane) {
+    if (intersector.intersect(plane, &i)) {
+        if (!color || i.t < t) {
+            t = i.t;
+            point = ray.point + (ray.direction * t);
+            normal = plane.normal;
+            color = &plane.color;
+        }
     }
 }
 
-static Color (*shade)(const Vector3&, const Vector3&) = &lambert_shade;
+void RayCaster::visit(Triangle3& triangle) {
+    if (intersector.intersect(triangle, &i)) {
+        if (!color || i.t < t) {
+            t = i.t;
+            point = ray.point + (ray.direction * t);
+            normal = normalize(triangle.plane.normal);
+            color = &triangle.color;
+        }
+    }
+}
+
+void RayCaster::visit(Sphere& sphere) {
+    if (intersector.intersect(sphere, &i)) {
+        if (!color || i.t < t) {
+            t = i.t;
+            point = ray.point + (ray.direction * t);
+            normal = normalize(point - sphere.origin);
+            color = &sphere.color;
+        }
+    }
+}
 
 RaytraceRenderer::RaytraceRenderer() {
-    // TODO Auto-generated constructor stub
-
 }
 
 RaytraceRenderer::~RaytraceRenderer() {
-    // TODO Auto-generated destructor stub
 }
 
 void RaytraceRenderer::render(Viewport& viewport, const Camera& camera,
-                      const Geometric3* geometry, const Vector3* light) const {
+                              const Scene& scene) {
     unsigned int width, height;
     viewport.get_metrics(width, height);
+    Vector3& light = *(scene.lights[0]);
     for (unsigned int y = 0; y < height; y++) {
         for (unsigned int x = 0; x < width; x++) {
             Ray3 ray(Point3(x, y, -1000), camera.direction);
-            real t;
-            Vector3 n;
-            if (geometry->intersect(ray, &t, &n)) {
-                Point3 p = ray.point + (ray.direction * t);
-                viewport.set_pixel(x, y, shade(n, normalize(*light - p)));
+            RayCaster caster(ray);
+            for (unsigned int i = 0; i < scene.renderables.size(); ++i) {
+                Geometric& renderable = *scene.renderables[i];
+                renderable.accept(caster);
+            }
+            if (caster.color) {
+                viewport.set_pixel(
+                        x,
+                        y,
+                        shade(caster.normal, *caster.color,
+                              normalize(light - caster.point)));
             }
         }
     }

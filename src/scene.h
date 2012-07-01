@@ -1,24 +1,32 @@
 #ifndef SCENE_H_
 #define SCENE_H_
 
-#include "vector3.h"
-#include "geometric3.h"
+#include "geometry/geometric.h"
+#include "color.h"
 
+#include <vector>
 
 namespace softedge {
 
-class Node;
-class Renderable;
-class Intersectable;
+
+class Renderable {
+public:
+    Renderable();
+    virtual ~Renderable();
+
+    Geometric& geometry;
+    Color color;
+};
+
 
 class Scene {
 public:
-    Scene(Vector3 light, Geometric3 geometry) :
-            light(light), geometry(geometry) {
+    Scene() {
+
     }
 
-    Vector3 light;
-    Geometric3 geometry;
+    std::vector<Geometric*> renderables;
+    std::vector<Vector3*> lights;
 };
 
 }  // namespace softedge

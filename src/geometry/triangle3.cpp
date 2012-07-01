@@ -19,6 +19,10 @@ Triangle3::Triangle3(const Point3& A, const Point3& B, const Point3& C) :
 Triangle3::~Triangle3() {
 }
 
+void Triangle3::accept(Visitor& visitor) {
+    visitor.visit(*this);
+}
+
 bool Triangle3::intersect(const Ray3& ray, real* t, Vector3* normal) const {
     Vector3 ab = b - a;
     Vector3 ac = c - a;
