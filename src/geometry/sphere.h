@@ -1,7 +1,7 @@
 #ifndef SPHERE_H_
 #define SPHERE_H_
 
-#include "geometric3.h"
+#include "geometric.h"
 #include "point3.h"
 #include "real.h"
 
@@ -10,7 +10,7 @@ namespace softedge {
 class Vector3;
 class Ray3;
 
-class Sphere: public Geometric3 {
+class Sphere: public Geometric {
 public:
     Sphere(Point3 origin, real radius);
 

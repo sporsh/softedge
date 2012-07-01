@@ -1,7 +1,7 @@
 #ifndef PLANE3_H_
 #define PLANE3_H_
 
-#include "geometric3.h"
+#include "geometric.h"
 #include "vector3.h"
 #include "real.h"
 
@@ -10,7 +10,7 @@ namespace softedge {
 class Point3;
 class Ray3;
 
-class Plane3: public Geometric3 {
+class Plane3: public Geometric {
 public:
     Plane3();
 //    Plane3(Plane3& plane);

@@ -10,11 +10,11 @@
 
 #include "renderer.h"
 
+#include "geometry/geometric.h"
 namespace softedge {
 
 class Viewport;
 class Camera;
-class Geometric3;
 class Vector3;
 
 class RaytraceRenderer: public Renderer {

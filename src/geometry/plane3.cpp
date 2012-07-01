@@ -1,4 +1,4 @@
-#include "geometric3.h"
+#include "geometric.h"
 #include "plane3.h"
 #include "ray3.h"
 #include "point3.h"
@@ -7,18 +7,18 @@
 namespace softedge {
 
 Plane3::Plane3() :
-        Geometric3(PLANE) {
+        Geometric() {
 }
 
 Plane3::Plane3(Vector3 normal, real d) :
-        Geometric3(PLANE), normal(normal), d(d) {
+        Geometric(), normal(normal), d(d) {
 }
 Plane3::Plane3(Vector3 normal, Point3 p) :
-        Geometric3(PLANE), normal(normal), d(length(p)) {
+        Geometric(), normal(normal), d(length(p)) {
 }
 
 Plane3::Plane3(Point3 a, Point3 b, Point3 c) :
-        Geometric3(PLANE), normal((cross(b - a, c - a))), d(dot(normal, a)) {
+        Geometric(), normal((cross(b - a, c - a))), d(dot(normal, a)) {
 
 }
 

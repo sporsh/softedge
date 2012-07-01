@@ -1,5 +1,5 @@
 #include "sphere.h"
-#include "geometric3.h"
+#include "geometric.h"
 #include "point3.h"
 #include "vector3.h"
 #include "ray3.h"
@@ -9,7 +9,7 @@
 namespace softedge {
 
 Sphere::Sphere(Point3 origin, real radius) :
-        Geometric3(SPHERE), origin(origin), radius(radius) {
+        Geometric(), origin(origin), radius(radius) {
 }
 
 bool Sphere::intersect(const Ray3& ray, real* t, Vector3* normal) const {

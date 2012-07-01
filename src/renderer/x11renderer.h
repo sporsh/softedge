@@ -9,9 +9,9 @@ namespace softedge {
 
 class X11ViewportWindow;
 class Camera;
-class Geometric3;
 class Vector3;
 class Triangle3;
+class Geometric;
 class Sphere;
 
 class X11Renderer: public Renderer {

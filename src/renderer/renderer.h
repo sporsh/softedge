@@ -6,7 +6,6 @@
 #include "real.h"
 
 namespace softedge {
-class Geometric3;
 }  // namespace softedge
 
 namespace softedge {

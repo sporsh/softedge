@@ -13,7 +13,7 @@ namespace softedge {
 //}
 
 Triangle3::Triangle3(const Point3& A, const Point3& B, const Point3& C) :
-        Geometric3(TRIANGLE), a(A), b(B), c(C), plane(Plane3(A, B, C)) {
+        Geometric(), a(A), b(B), c(C), plane(Plane3(A, B, C)) {
 }
 
 Triangle3::~Triangle3() {

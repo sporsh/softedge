@@ -1,7 +1,7 @@
 #ifndef TRIANGLE3_H_
 #define TRIANGLE3_H_
 
-#include "geometric3.h"
+#include "geometric.h"
 #include "plane3.h"
 #include "point3.h"
 
@@ -9,7 +9,7 @@ namespace softedge {
 
 class Vector3;
 
-class Triangle3: public Geometric3 {
+class Triangle3: public Geometric {
 public:
     Point3 a;
     Point3 b;

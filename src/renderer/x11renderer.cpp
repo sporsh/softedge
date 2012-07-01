@@ -2,7 +2,7 @@
 #include "x11viewportwindow.h"
 
 #include "camera.h"
-#include "geometry/geometric3.h"
+#include "geometry/geometric.h"
 #include "geometry/triangle3.h"
 #include "geometry/sphere.h"
 #include "vector3.h"

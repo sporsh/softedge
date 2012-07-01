@@ -4,7 +4,7 @@
 #include "vector3.h"
 #include "geometry/ray3.h"
 #include "camera.h"
-#include "geometry/geometric3.h"
+#include "geometry/geometric.h"
 
 namespace softedge {
 
