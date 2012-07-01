@@ -35,21 +35,38 @@ Color& Color::operator =(const Color& color) {
     return *this;
 }
 
-Color::operator unsigned int() const {
+unsigned int Color::get_color(const ColorMode mode) const {
+    unsigned char ca = 0xff;
+    unsigned char cr = std::min(0xff, (int) (0xff * r));
+    unsigned char cg = std::min(0xff, (int) (0xff * g));
+    unsigned char cb = std::min(0xff, (int) (0xff * b));
+
     union {
         struct {
-            unsigned char b;
-            unsigned char g;
-            unsigned char r;
-            unsigned char a;
+            unsigned char c1;
+            unsigned char c2;
+            unsigned char c3;
+            unsigned char c4;
         } comp;
-        unsigned int color;
+        unsigned int value;
     };
-    comp.a = 0xff;
-    comp.r = std::min(0xff, (int) (0xff * r));
-    comp.g = std::min(0xff, (int) (0xff * g));
-    comp.b = std::min(0xff, (int) (0xff * b));
-    return color;
+
+    switch(mode) {
+    case ARGB:
+        comp.c1 = cb;
+        comp.c2 = cg;
+        comp.c3 = cr;
+        comp.c4 = ca;
+        break;
+    case RGBA:
+        comp.c1 = ca;
+        comp.c2 = cb;
+        comp.c3 = cg;
+        comp.c4 = cr;
+        break;
+    }
+
+    return value;
 }
 
 }  // namespace softedge

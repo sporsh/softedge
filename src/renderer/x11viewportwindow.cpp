@@ -66,7 +66,7 @@ void X11ViewportWindow::update() {
 void X11ViewportWindow::set_pixel(unsigned int x, unsigned int y,
                                   const Color& color) const {
     unsigned int i = (y * width + x);
-    data[i] = color;
+    data[i] = color.get_color(ARGB);
 }
 
 } /* namespace softedge */
