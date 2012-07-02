@@ -82,35 +82,45 @@ private:
     virtual int main(int argc, char* argv[]) {
         Scene scene;
 
-        Camera camera(Point3(0, 0, 0), Vector3(0, 0, 1));
+        Camera camera(Point3(640/2, 480/2, 0), Vector3(0, 0, 1));
 
         Vector3 light = Vector3(320, 120, 50);
         Sphere sphere = Sphere(Point3(640 / 2, 480 / 2, 400), 200);
         sphere.color = Color(1.0, 0.2, 0.2);
         scene.lights.push_back(&light);
         scene.renderables.push_back(&sphere);
-//        scene.renderables.push_back(new Sphere(Point3(640, 480, 500), 250));
-//        scene.renderables.push_back(new Sphere(Point3(100, 100, 400), 100));
-//        scene.renderables.push_back(
-//                new Plane3(normalize(Vector3(5, 0, -1)), 0));
-//        scene.renderables.push_back(
-//                new Plane3(normalize(Vector3(-5, 0, -1)), -640));
-//        scene.renderables.push_back(
-//                new Plane3(normalize(Vector3(0, 0, -1)), -1000));
-//        scene.renderables.push_back(
-//                new Triangle3(Point3(100, 100, 400), Point3(100, 400, 400),
-//                              Point3(400, 100, 100)));
+        Sphere sphere2(Point3(640, 480, 500), 250);
+        sphere2.color = Color(1.0, 1.0, 0.0);
+        scene.renderables.push_back(&sphere2);
+        Sphere sphere3(Point3(100, 100, 400), 100);
+        sphere3.color = Color(0.0, 0.0, 1.0);
+        scene.renderables.push_back(&sphere3);
+        scene.renderables.push_back(
+                new Plane3(normalize(Vector3(5, 0, -1)), 0));
+        scene.renderables.push_back(
+                new Plane3(normalize(Vector3(-5, 0, -1)), -640));
+        scene.renderables.push_back(
+                new Plane3(normalize(Vector3(0, 0, -1)), -1000));
+        scene.renderables.push_back(
+                new Triangle3(Point3(100, 100, 400), Point3(100, 400, 400),
+                              Point3(400, 100, 100)));
         scene.renderables.push_back(
                 new Triangle3(Point3(100, 400, 400), Point3(200, 550, 800),
                               Point3(400, 100, 100)));
 
         RaytraceRenderer rt_renderer;
         X11ViewportWindow rt_viewport(640, 480, "Raytracer", display, 0, 0);
+        rt_viewport.show();
+
         X11Renderer x11_renderer;
         X11ViewportWindow x11_viewport(640, 480, "X11 Renderer", display, 0,
                                        0);
-        rt_viewport.show();
         x11_viewport.show();
+
+        GLUTRenderer glut_renderer;
+        GLXViewportWindow glx_viewport(640, 480, "GLUT Renderer", display, 0,
+                                       0);
+        glx_viewport.show();
 
         XEvent event;
         while (APP_STATE_RUNNING == state) {
@@ -133,6 +143,9 @@ private:
 
 //                x11_viewport.update();
                 x11_renderer.render(x11_viewport, camera, scene);
+
+                glut_renderer.render(glx_viewport, camera, scene);
+                glx_viewport.update();
 
                 break;
             case KeyRelease:
