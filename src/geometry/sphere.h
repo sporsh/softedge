@@ -14,7 +14,6 @@ class Sphere: public Geometric {
 public:
     Sphere(Point3 origin, real radius);
 
-    bool intersect(const Ray3& ray, real* t, Vector3* normal) const;
     virtual void accept(Visitor& visitor);
 
     Point3 origin;

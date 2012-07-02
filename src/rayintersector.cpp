@@ -16,8 +16,7 @@ RayIntersector::RayIntersector(const Ray3& ray, bool backface) :
 RayIntersector::~RayIntersector() {
 }
 
-bool RayIntersector::intersect(Plane3& plane,
-                               RayIntersection* intersection_result) {
+bool RayIntersector::intersect(const Plane3& plane, RayIntersection* result) {
     real NdD = dot(plane.normal, ray.direction);
     if (NdD == 0) {
         // Plane and ray is parallel.
@@ -38,23 +37,22 @@ bool RayIntersector::intersect(Plane3& plane,
         return false;
     }
 
-    if (intersection_result) {
-        intersection_result->t = t;
+    if (result) {
+        result->t = t;
     }
     return true;
 }
 
-bool RayIntersector::intersect(Triangle3& triangle,
-                               RayIntersection* intersection_result) {
+bool RayIntersector::intersect(const Triangle3& triangle, RayIntersection* result) {
     real t;
     Vector3 ab = triangle.b - triangle.a;
     Vector3 ac = triangle.c - triangle.a;
-    Vector3 qp = normalize(ray.direction * -1);
+    Vector3 qp = ray.direction * -1;
 
     Vector3 n = triangle.plane.normal;
 
     real d = dot(qp, n);
-    if (d <= 0 && !backface) {
+    if (d <= 0.0 && !backface) {
         //Plane and ray is parallel or points away.
         return false;
     }
@@ -75,26 +73,39 @@ bool RayIntersector::intersect(Triangle3& triangle,
         return false;
     }
 
-    if (intersection_result) {
+    if (result) {
         real ood = 1.0 / d;
         t *= ood;
-        intersection_result->t = t;
+        result->t = t;
     }
     return true;
 }
 
-bool RayIntersector::intersect(Sphere& sphere,
-                               RayIntersection* intersection_result) {
-    Vector3 dist = sphere.origin - ray.point;
-    real B = dot(ray.direction, dist);
-    real D = B * B - dot(dist, dist) + sphere.radius * sphere.radius;
-    if (D < 0.0 && !backface) {
-        // Inside sphere
+bool RayIntersector::intersect(const Sphere& sphere, RayIntersection* result) {
+    Vector3 m = ray.point - sphere.origin;
+    real c = dot(m, m) - sphere.radius * sphere.radius;
+
+    // Defently a hit, but we don't care about where
+    if (!result && c <= 0.0)
+        return true;
+
+    real b = dot(m, ray.direction);
+    // Ray origin outside sphere, and pointing away
+    if (b > 0.0)
         return false;
-    }
-    if (intersection_result) {
-        real t = B - sqrt(D);
-        intersection_result->t = t;
+
+    real discr = b * b - c;
+    // Ray missing sphere
+    if (discr < 0.0)
+        return false;
+
+    if (result) {
+        real t = -b - sqrt(discr);
+        // Ray started inside sphere
+        if (t < 0.0) {
+            t = -b + sqrt(discr);
+        }
+        result->t = t;
     }
     return true;
 }

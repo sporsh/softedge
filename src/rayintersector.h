@@ -20,9 +20,9 @@ public:
     RayIntersector(const Ray3& ray, bool backface = false);
     virtual ~RayIntersector();
 
-    bool intersect(Plane3& plane, RayIntersection* intersection_result = 0);
-    bool intersect(Triangle3& triangle, RayIntersection* intersection_result = 0);
-    bool intersect(Sphere& sphere, RayIntersection* intersection_result = 0);
+    bool intersect(const Plane3& plane, RayIntersection* result = 0);
+    bool intersect(const Triangle3& triangle, RayIntersection* result = 0);
+    bool intersect(const Sphere& sphere, RayIntersection* result = 0);
 
 private:
     const Ray3& ray;

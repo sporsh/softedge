@@ -26,29 +26,4 @@ void Plane3::accept(Visitor& visitor) {
     visitor.visit(*this);
 }
 
-bool Plane3::intersect(const Ray3& ray, real* t, Vector3* normal) const {
-    real NdD = dot(this->normal, ray.direction);
-    if (NdD == 0) {
-        // Plane and ray is parallel.
-        return false;
-    }
-
-    // Distance from ray origin to plane.
-    real distp = dot(this->normal, ray.point) - d;
-    if (distp < .0) {
-        // Ray starts behind plane.
-        return false;
-    }
-
-    *t = (d - dot(this->normal, ray.point)) / NdD;
-    *normal = this->normal;
-
-//    if (d > 0) {
-//        // Plane is pointing away from ray.
-//        return false;
-//    }
-
-    return true;
-}
-
 }  // namespace softedge
