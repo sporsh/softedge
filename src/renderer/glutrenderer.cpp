@@ -49,6 +49,9 @@ GLUTRenderer::GLUTRenderer() :
         rasterizer(GLUTRasterizer()) {
 }
 
+GLUTRenderer::~GLUTRenderer() {
+}
+
 void GLUTRenderer::render(GLXViewportWindow& viewport, const Camera& camera,
                           const Scene& scene) {
     rasterizer.viewport = &viewport;
