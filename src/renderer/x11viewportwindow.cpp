@@ -35,7 +35,7 @@ X11ViewportWindow::X11ViewportWindow(const unsigned int width,
             display,
             window,
             StructureNotifyMask | ButtonPressMask | ButtonReleaseMask
-                    | KeyReleaseMask);
+                    | PointerMotionMask | KeyReleaseMask);
 
     Atom wmDeleteMessage = XInternAtom(display, "WM_DELETE_WINDOW", False);
     XSetWMProtocols(display, window, &wmDeleteMessage, 1);

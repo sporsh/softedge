@@ -43,6 +43,12 @@ GLXViewportWindow::GLXViewportWindow(const unsigned int width,
     glXMakeCurrent(display, window, glc);
 
     glEnable(GL_DEPTH_TEST);
+
+    XSelectInput(
+            display,
+            window,
+            StructureNotifyMask | ButtonPressMask | ButtonReleaseMask
+                    | PointerMotionMask | KeyReleaseMask);
 }
 
 GLXViewportWindow::~GLXViewportWindow() {

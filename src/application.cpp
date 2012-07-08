@@ -82,31 +82,35 @@ private:
     virtual int main(int argc, char* argv[]) {
         Scene scene;
 
-        Camera camera(Point3(640/2, 480/2, 0), Vector3(0, 0, 1));
+        Camera camera(Point3(640 / 2, 480 / 2, 0), Vector3(0, 0, 1));
 
         Vector3 light = Vector3(320, 120, 50);
+        scene.lights.push_back(&light);
+
         Sphere sphere = Sphere(Point3(640 / 2, 480 / 2, 400), 200);
         sphere.color = Color(1.0, 0.2, 0.2);
-        scene.lights.push_back(&light);
-        scene.renderables.push_back(&sphere);
         Sphere sphere2(Point3(640, 480, 500), 250);
         sphere2.color = Color(1.0, 1.0, 0.0);
-        scene.renderables.push_back(&sphere2);
-        Sphere sphere3(Point3(100, 100, 400), 100);
+        Sphere sphere3(Point3(0, 0, 0), 200);
         sphere3.color = Color(0.0, 0.0, 1.0);
+
+        scene.renderables.push_back(&sphere);
+        scene.renderables.push_back(&sphere2);
         scene.renderables.push_back(&sphere3);
-        scene.renderables.push_back(
-                new Plane3(normalize(Vector3(5, 0, -1)), 0));
-        scene.renderables.push_back(
-                new Plane3(normalize(Vector3(-5, 0, -1)), -640));
-        scene.renderables.push_back(
-                new Plane3(normalize(Vector3(0, 0, -1)), -1000));
-        scene.renderables.push_back(
-                new Triangle3(Point3(100, 100, 400), Point3(100, 400, 400),
-                              Point3(400, 100, 100)));
-        scene.renderables.push_back(
-                new Triangle3(Point3(100, 400, 400), Point3(200, 550, 800),
-                              Point3(400, 100, 100)));
+
+        Plane3 plane1(normalize(Vector3(5, 0, -1)), 0);
+        Plane3 plane2(normalize(Vector3(-5, 0, -1)), -640);
+        Plane3 plane3(normalize(Vector3(0, 0, -1)), -1000);
+        scene.renderables.push_back(&plane1);
+        scene.renderables.push_back(&plane2);
+        scene.renderables.push_back(&plane3);
+
+        Triangle3 triangle1(Point3(100, 100, 400), Point3(100, 400, 400),
+                            Point3(400, 100, 100));
+        Triangle3 triangle2(Point3(100, 400, 400), Point3(200, 550, 800),
+                            Point3(400, 100, 100));
+        scene.renderables.push_back(&triangle1);
+        scene.renderables.push_back(&triangle2);
 
         RaytraceRenderer rt_renderer;
         X11ViewportWindow rt_viewport(640, 480, "Raytracer", display, 0, 0);
@@ -122,34 +126,48 @@ private:
                                        0);
         glx_viewport.show();
 
+        real *x = NULL, *y = NULL;
         XEvent event;
         while (APP_STATE_RUNNING == state) {
             XNextEvent(display, &event);
             switch (event.type) {
             case ButtonRelease:
-                switch (event.xbutton.button) {
-                case 1:
-                    light.x = event.xbutton.x;
-                    light.y = event.xbutton.y;
-                    break;
-                case 3:
-                    sphere.origin.x = event.xbutton.x;
-                    sphere.origin.y = event.xbutton.y;
-                    break;
-                }
-
+                x = y = NULL;
                 rt_renderer.render(rt_viewport, camera, scene);
                 rt_viewport.update();
-
-//                x11_viewport.update();
+                x11_viewport.update();
                 x11_renderer.render(x11_viewport, camera, scene);
-
-                glut_renderer.render(glx_viewport, camera, scene);
-                glx_viewport.update();
-
+                break;
+            case ButtonPress:
+                switch (event.xbutton.button) {
+                case 1:
+                    x = &light.x;
+                    y = &light.y;
+                    break;
+                case 3:
+                    x = &sphere.origin.x;
+                    y = &sphere.origin.y;
+                    break;
+                }
+                break;
+            case MotionNotify:
+                if (x && y && *x != event.xmotion.x) {
+                    *x = event.xmotion.x;
+                    *y = event.xmotion.y;
+                    glut_renderer.render(glx_viewport, camera, scene);
+                    glx_viewport.update();
+                }
+//                printf("MotionNotify: %d\n", event.xmotion.x);
                 break;
             case KeyRelease:
-                state = APP_STATE_STOPPING;
+                switch (XLookupKeysym(&event.xkey, 0)) {
+                case XK_q | XK_Q | XK_Escape:
+                    state = APP_STATE_STOPPING;
+                    break;
+                default:
+//                    printf("Key event: %s\n", XKeysymToString(key_sym));
+                    break;
+                }
                 break;
             case ClientMessage:
                 printf("Unhandeled event: %s\n",
