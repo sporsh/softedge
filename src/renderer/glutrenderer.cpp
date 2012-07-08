@@ -28,7 +28,7 @@ void GLUTRasterizer::visit(Sphere& sphere) {
     glLoadIdentity();
     glTranslatef(sphere.origin.x, sphere.origin.y, sphere.origin.z);
     glPushMatrix();
-    gluSphere(quadric, sphere.radius, 12, 12);
+    gluSphere(quadric, sphere.radius, 30, 30);
     glPopMatrix();
     gluDeleteQuadric(quadric);
 }
@@ -62,7 +62,8 @@ void GLUTRenderer::render(GLXViewportWindow& viewport, const Camera& camera,
     viewport.get_metrics(w, h, l, t);
 
     glClearColor(0.0, 0.0, 0.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    GLbitfield mask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
+    glClear(mask);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
