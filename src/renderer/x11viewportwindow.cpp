@@ -12,7 +12,8 @@ X11ViewportWindow::X11ViewportWindow(const unsigned int width,
                                      const char* title, Display* display,
                                      const int left, const int top) :
         ViewportWindow(width, height, title, left, top), display(display) {
-    data = new unsigned int[width * height];
+    data = static_cast<unsigned int*>(malloc(
+            width * height * sizeof(unsigned int)));
     int screen = DefaultScreen(display);
     int format = ZPixmap;
     int bitmap_pad = 32;
@@ -44,7 +45,6 @@ X11ViewportWindow::~X11ViewportWindow() {
     XFreeGC(display, gc);
     XDestroyWindow(display, window);
     XDestroyImage(image);
-    delete[] data;
 }
 
 void X11ViewportWindow::show() {
