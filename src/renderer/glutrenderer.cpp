@@ -2,6 +2,7 @@
 #include "glxviewportwindow.h"
 #include "geometry/sphere.h"
 #include "geometry/triangle3.h"
+#include "geometry/trianglelist.h"
 #include "scene.h"
 #include "camera.h"
 
@@ -45,6 +46,19 @@ void GLUTRasterizer::visit(Triangle3& triangle) {
     glEnd();                //tells OpenGL that we've finished drawing
 }
 
+void GLUTRasterizer::visit(TriangleList& ts) {
+    GLfloat color[] = { ts.color.r, ts.color.g, ts.color.b };
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, color);
+
+    glLoadIdentity();
+    glBegin(GL_TRIANGLES);
+    for (unsigned int i = 0; i < ts.vertex_array.size(); ++i) {
+        const Point3& p = ts.vertex_array[i];
+        glVertex3f(p.x, p.y, p.z);
+    }
+    glEnd();
+}
+
 GLUTRenderer::GLUTRenderer() :
         rasterizer(GLUTRasterizer()) {
 }
@@ -63,6 +77,7 @@ void GLUTRenderer::render(GLXViewportWindow& viewport, const Camera& camera,
 
     glClearColor(0.0, 0.0, 0.0, 1.0);
     GLbitfield mask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
+//    GLbitfield mask = GL_DEPTH_BUFFER_BIT;
     glClear(mask);
 
     glMatrixMode(GL_PROJECTION);

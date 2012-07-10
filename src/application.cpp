@@ -15,6 +15,7 @@
 #include "geometry/triangle3.h"
 #include "geometry/plane3.h"
 #include "geometry/sphere.h"
+#include "geometry/trianglelist.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -105,12 +106,23 @@ private:
         scene.renderables.push_back(&plane2);
         scene.renderables.push_back(&plane3);
 
-        Triangle3 triangle1(Point3(100, 100, 400), Point3(100, 400, 400),
-                            Point3(400, 100, 100));
-        Triangle3 triangle2(Point3(100, 400, 400), Point3(200, 550, 800),
-                            Point3(400, 100, 100));
-        scene.renderables.push_back(&triangle1);
-        scene.renderables.push_back(&triangle2);
+//        Triangle3 triangle1(Point3(100, 100, 400), Point3(100, 400, 400),
+//                            Point3(400, 100, 100));
+//        Triangle3 triangle2(Point3(100, 400, 400), Point3(200, 550, 800),
+//                            Point3(400, 100, 100));
+//        scene.renderables.push_back(&triangle1);
+//        scene.renderables.push_back(&triangle2);
+
+        VertexArray vertex_array;
+        vertex_array.push_back(Point3(400, 100, 100));
+        vertex_array.push_back(Point3(100, 400, 400));
+        vertex_array.push_back(Point3(100, 100, 400));
+
+        vertex_array.push_back(Point3(400, 100, 100));
+        vertex_array.push_back(Point3(200, 550, 800));
+        vertex_array.push_back(Point3(100, 400, 400));
+        TriangleList tri_soup(vertex_array);
+        scene.renderables.push_back(&tri_soup);
 
         RaytraceRenderer rt_renderer;
         X11ViewportWindow rt_viewport(640, 480, "Raytracer", display, 0, 0);
@@ -161,7 +173,9 @@ private:
                 break;
             case KeyRelease:
                 switch (XLookupKeysym(&event.xkey, 0)) {
-                case XK_q | XK_Q | XK_Escape:
+                case XK_q:
+                case XK_Q:
+                case XK_Escape:
                     state = APP_STATE_STOPPING;
                     break;
                 default:

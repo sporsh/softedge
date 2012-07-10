@@ -8,6 +8,7 @@
 #include "geometry/geometric.h"
 #include "geometry/sphere.h"
 #include "geometry/triangle3.h"
+#include "geometry/trianglelist.h"
 
 #include <math.h>
 
@@ -20,8 +21,8 @@ static Color normal_shade(const Vector3& normal, const Color&,
 
 static Color lambert_shade(const Vector3& normal, const Color& color,
                            const Vector3& in) {
-    Color ambient(.1, .1, .2);
-//    Color color(1.0, .5, .5);
+//    Color ambient(.1, .1, .2);
+    Color ambient(.1, .1, .1);
     real i = dot(in, normal);
     if (i < .0) {
         return ambient;
@@ -58,6 +59,16 @@ void RayCaster::visit(Triangle3& triangle) {
     }
 }
 
+void RayCaster::visit(TriangleList& ts) {
+    for (unsigned int i = 0; i < ts.vertex_array.size(); ++i) {
+        Triangle3 triangle(ts.vertex_array[i],
+                           ts.vertex_array[i++],
+                           ts.vertex_array[i++]);
+        triangle.color = ts.color;
+        visit(triangle);
+    }
+}
+
 void RayCaster::visit(Sphere& sphere) {
     if (intersector.intersect(sphere, &i)) {
         if (!color || i.t < t) {
@@ -82,7 +93,7 @@ void RaytraceRenderer::render(Viewport& viewport, const Camera& camera,
     Vector3& light = *(scene.lights[0]);
     for (unsigned int y = 0; y < height; y++) {
         for (unsigned int x = 0; x < width; x++) {
-            Ray3 ray(Point3(x, y, -1000), camera.direction);
+            Ray3 ray(Point3(x, y, 0), camera.direction);
             RayCaster caster(ray);
             for (unsigned int i = 0; i < scene.renderables.size(); ++i) {
                 Geometric& renderable = *scene.renderables[i];

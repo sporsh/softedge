@@ -36,6 +36,9 @@ void X11Rasterizer::visit(Triangle3& triangle) {
                  Convex, CoordModeOrigin);
 }
 
+void X11Rasterizer::visit(TriangleList& ts) {
+}
+
 void X11Rasterizer::set_color(Color& color) {
     XSetForeground(viewport->display, viewport->gc, color.get_color(ARGB));
 }

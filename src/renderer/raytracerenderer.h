@@ -33,8 +33,9 @@ public:
     RayCaster(const Ray3& ray);
 
     virtual void visit(Plane3& plane);
-    virtual void visit(Triangle3& triangle);
     virtual void visit(Sphere& sphere);
+    virtual void visit(Triangle3& triangle);
+    virtual void visit(TriangleList& ts);
 
     real t;
     Point3 point;

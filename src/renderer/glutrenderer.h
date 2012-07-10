@@ -23,6 +23,7 @@ public:
     virtual void visit(Plane3& plane);
     virtual void visit(Triangle3& triangle);
     virtual void visit(Sphere& sphere);
+    virtual void visit(TriangleList& ts);
 
     void set_color(Color& color);
 
