@@ -1,6 +1,7 @@
 #ifndef RAYINTERSECTOR_H_
 #define RAYINTERSECTOR_H_
 
+#include "vector3.h"
 #include "real.h"
 
 namespace softedge {
@@ -26,6 +27,7 @@ public:
 
 private:
     const Ray3& ray;
+    const Vector3 qp;
     bool backface;
 };
 

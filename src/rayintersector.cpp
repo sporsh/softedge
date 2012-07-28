@@ -4,13 +4,14 @@
 #include "geometry/plane3.h"
 #include "geometry/triangle3.h"
 #include "geometry/sphere.h"
+#include "vector3.h"
 
 #include <math.h>
 
 namespace softedge {
 
 RayIntersector::RayIntersector(const Ray3& ray, bool backface) :
-        ray(ray), backface(backface) {
+        ray(ray), qp(ray.direction * -1), backface(backface) {
 }
 
 RayIntersector::~RayIntersector() {
@@ -43,13 +44,13 @@ bool RayIntersector::intersect(const Plane3& plane, RayIntersection* result) {
     return true;
 }
 
-bool RayIntersector::intersect(const Triangle3& triangle, RayIntersection* result) {
+bool RayIntersector::intersect(const Triangle3& triangle,
+                               RayIntersection* result) {
     real t;
-    Vector3 ab = triangle.b - triangle.a;
-    Vector3 ac = triangle.c - triangle.a;
-    Vector3 qp = ray.direction * -1;
+    const Vector3 ab = triangle.b - triangle.a;
+    const Vector3 ac = triangle.c - triangle.a;
 
-    Vector3 n = triangle.plane.normal;
+    const Vector3& n = triangle.plane.normal;
 
     real d = dot(qp, n);
     if (d <= 0.0 && !backface) {
