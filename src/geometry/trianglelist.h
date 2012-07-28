@@ -2,12 +2,12 @@
 #define TRIANGLELIST_H_
 
 #include "geometric.h"
+#include "point3.h"
 
 #include <vector>
 
 namespace softedge {
 
-class Point3;
 class Visitor;
 
 typedef std::vector<Point3> VertexArray;

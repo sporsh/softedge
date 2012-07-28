@@ -8,7 +8,6 @@ namespace softedge {
 
 class Renderer;
 class Ray3;
-class Vector3;
 
 class Geometric;
 class Plane3;

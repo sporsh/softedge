@@ -2,6 +2,7 @@
 #define SCENE_H_
 
 #include "geometry/geometric.h"
+#include "vector3.h"
 #include "color.h"
 
 #include <vector>

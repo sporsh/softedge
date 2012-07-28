@@ -7,7 +7,6 @@
 
 namespace softedge {
 
-class Vector3;
 class Ray3;
 
 class Sphere: public Geometric {
