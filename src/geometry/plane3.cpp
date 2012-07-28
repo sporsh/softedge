@@ -10,14 +10,14 @@ Plane3::Plane3() :
         Geometric() {
 }
 
-Plane3::Plane3(Vector3 normal, real d) :
+Plane3::Plane3(const Vector3& normal, real d) :
         Geometric(), normal(normal), d(d) {
 }
-Plane3::Plane3(Vector3 normal, Point3 p) :
+Plane3::Plane3(const Vector3& normal, const Point3& p) :
         Geometric(), normal(normal), d(length(p)) {
 }
 
-Plane3::Plane3(Point3 a, Point3 b, Point3 c) :
+Plane3::Plane3(const Point3& a, const Point3& b, const Point3& c) :
         Geometric(), normal((cross(b - a, c - a))), d(dot(normal, a)) {
 
 }

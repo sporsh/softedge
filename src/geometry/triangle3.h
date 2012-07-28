@@ -7,13 +7,12 @@
 
 namespace softedge {
 
-class Vector3;
 
 class Triangle3: public Geometric {
 public:
-    Point3 a;
-    Point3 b;
-    Point3 c;
+    const Point3& a;
+    const Point3& b;
+    const Point3& c;
 
     Triangle3(const Point3& p1, const Point3& p2, const Point3& p3);
     virtual ~Triangle3();
