@@ -5,6 +5,7 @@
 #include "camera.h"
 #include "geometry/geometric.h"
 #include "geometry/triangle3.h"
+#include "geometry/trianglelist.h"
 #include "geometry/sphere.h"
 #include "vector3.h"
 #include "color.h"
@@ -37,6 +38,13 @@ void X11Rasterizer::visit(Triangle3& triangle) {
 }
 
 void X11Rasterizer::visit(TriangleList& ts) {
+    for (unsigned int i = 0; i < ts.vertex_array.size(); ++i) {
+        Triangle3 triangle(ts.vertex_array[i],
+                           ts.vertex_array[i++],
+                           ts.vertex_array[i++]);
+        triangle.color = ts.color;
+        visit(triangle);
+    }
 }
 
 void X11Rasterizer::set_color(Color& color) {
