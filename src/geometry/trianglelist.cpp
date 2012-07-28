@@ -3,7 +3,7 @@
 namespace softedge {
 
 TriangleList::TriangleList(const VertexArray& vertex_array) :
-        vertex_array(vertex_array) {
+        Geometric(), vertex_array(vertex_array) {
 }
 
 TriangleList::~TriangleList() {
