@@ -72,7 +72,7 @@ private:
 
         VertexArray vertex_array;
         const struct aiScene* ai_scene = NULL;
-        const char* filename = "/home/geir/src/softedge/src/examples/models/spider.obj";
+        const char* filename = "src/examples/models/spider.obj";
         ai_scene = aiImportFile(filename, 0);
         if (!ai_scene) {
             printf("FAILED TO OPEN %s\n", filename);
