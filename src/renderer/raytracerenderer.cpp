@@ -14,10 +14,10 @@
 
 namespace softedge {
 
-static Color normal_shade(const Vector3& normal, const Color&,
-                          const Vector3&) {
-    return Color(normalize(Vector3(1, 1, 1) - normal));
-}
+//static Color normal_shade(const Vector3& normal, const Color&,
+//                          const Vector3&) {
+//    return Color(normalize(Vector3(1, 1, 1) - normal));
+//}
 
 static Color lambert_shade(const Vector3& normal, const Color& color,
                            const Vector3& in) {
