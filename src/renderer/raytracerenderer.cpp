@@ -60,12 +60,18 @@ void RayCaster::visit(Triangle3& triangle) {
 }
 
 void RayCaster::visit(TriangleList& ts) {
-    for (unsigned int i = 0; i < ts.vertex_array.size(); ++i) {
-        Triangle3 triangle(ts.vertex_array[i],
-                           ts.vertex_array[i++],
-                           ts.vertex_array[i++]);
-        triangle.color = ts.color;
-        visit(triangle);
+    for (unsigned int n = 0; n < ts.vertex_array.size(); ++n) {
+        Triangle3 triangle(ts.vertex_array[n],
+                           ts.vertex_array[n++],
+                           ts.vertex_array[n++]);
+        if (intersector.intersect(triangle, &i)) {
+            if (!color || i.t < t) {
+                t = i.t;
+                point = ray.point + (ray.direction * t);
+                normal = normalize(triangle.plane.normal);
+                color = &ts.color;
+            }
+        }
     }
 }
 
