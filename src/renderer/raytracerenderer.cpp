@@ -34,7 +34,7 @@ static Color (*shade)(const Vector3&, const Color& color,
                       const Vector3&) = &lambert_shade;
 
 RayCaster::RayCaster(const Ray3& ray) :
-        ray(ray), intersector(RayIntersector(ray, true)), color(0) {
+        color(0), ray(ray), intersector(RayIntersector(ray, true)) {
 }
 
 void RayCaster::visit(Plane3& plane) {
