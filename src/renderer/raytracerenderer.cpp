@@ -1,6 +1,7 @@
 #include "scene.h"
 #include "raytracerenderer.h"
 #include "viewport.h"
+#include "viewportwindow.h"
 #include "color.h"
 #include "vector3.h"
 #include "geometry/ray3.h"
@@ -119,6 +120,8 @@ void RaytraceRenderer::render(Viewport& viewport, const Camera& camera,
 
 void RaytraceRenderer::render_region(Viewport& viewport, const Camera& camera,
                                      const Scene& scene, const Region region) const {
+    static boost::mutex x11_mutex;
+
     Vector3& light = *(scene.lights[0]);
     for (unsigned int y = region.y; y < region.y + region.height; ++y) {
         for (unsigned int x = region.x; x < region.x + region.width; ++x) {
@@ -137,6 +140,10 @@ void RaytraceRenderer::render_region(Viewport& viewport, const Camera& camera,
             }
         }
     }
+
+    x11_mutex.lock();
+    ((ViewportWindow&)viewport).update();
+    x11_mutex.unlock();
 }
 
 } /* namespace softedge */

@@ -146,7 +146,7 @@ private:
             case ButtonRelease:
                 x = y = NULL;
                 rt_renderer.render(rt_viewport, camera, scene);
-                rt_viewport.update();
+//                rt_viewport.update();
                 x11_viewport.update();
                 x11_renderer.render(x11_viewport, camera, scene);
                 break;
