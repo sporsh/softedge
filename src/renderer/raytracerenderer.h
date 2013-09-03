@@ -28,6 +28,8 @@ class Sphere;
 class Triangle3;
 class Plane3;
 
+struct Region;
+
 class RayCaster: public Visitor {
 public:
     RayCaster(const Ray3& ray);
@@ -54,6 +56,10 @@ public:
 
     void render(Viewport& viewport, const Camera& camera, const Scene& scene);
     void trace(Ray3& ray, const Scene& scene);
+
+private:
+    void render_region(Viewport& viewport, const Camera& camera,
+                       const Scene& scene, const Region region) const;
 };
 
 } /* namespace softedge */

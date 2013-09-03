@@ -10,9 +10,15 @@
 #include "geometry/triangle3.h"
 #include "geometry/trianglelist.h"
 
+#include <boost/thread.hpp>
 #include <math.h>
 
 namespace softedge {
+
+struct Region {
+    unsigned int x, y;
+    unsigned int width, height;
+};
 
 //static Color normal_shade(const Vector3& normal, const Color&,
 //                          const Vector3&) {
@@ -94,11 +100,28 @@ RaytraceRenderer::~RaytraceRenderer() {
 
 void RaytraceRenderer::render(Viewport& viewport, const Camera& camera,
                               const Scene& scene) {
+    boost::thread_group tg;
+
     unsigned int width, height;
+    Region region;
     viewport.get_metrics(width, height);
+    region.width = width / 2;
+    region.height = height / 2;
+    for (unsigned int y = 0; y < 2; ++y) {
+        for (unsigned int x = 0; x < 2; ++x) {
+            region.x = x * region.width;
+            region.y = y * region.height;
+            tg.create_thread(boost::bind(&RaytraceRenderer::render_region, this, boost::ref(viewport), camera, scene, region));
+        }
+    }
+    tg.join_all();
+}
+
+void RaytraceRenderer::render_region(Viewport& viewport, const Camera& camera,
+                                     const Scene& scene, const Region region) const {
     Vector3& light = *(scene.lights[0]);
-    for (unsigned int y = 0; y < height; y++) {
-        for (unsigned int x = 0; x < width; x++) {
+    for (unsigned int y = region.y; y < region.y + region.height; ++y) {
+        for (unsigned int x = region.x; x < region.x + region.width; ++x) {
             Ray3 ray(Point3(x, y, 0), camera.direction);
             RayCaster caster(ray);
             for (unsigned int i = 0; i < scene.renderables.size(); ++i) {
