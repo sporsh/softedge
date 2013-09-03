@@ -31,8 +31,9 @@ void X11Rasterizer::visit(Sphere& sphere) {
 void X11Rasterizer::visit(Triangle3& triangle) {
     set_color(triangle.color);
 
-    XPoint points[] = { { triangle.a.x, triangle.a.y }, { triangle.b.x,
-            triangle.b.y }, { triangle.c.x, triangle.c.y } };
+    XPoint points[] = { { (short) triangle.a.x, (short) triangle.a.y },
+                        { (short) triangle.b.x, (short) triangle.b.y },
+                        { (short) triangle.c.x, (short) triangle.c.y } };
     XFillPolygon(viewport->display, viewport->window, viewport->gc, points, 3,
                  Convex, CoordModeOrigin);
 }

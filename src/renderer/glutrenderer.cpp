@@ -24,7 +24,8 @@ void GLUTRasterizer::visit(Sphere& sphere) {
     GLUquadricObj *quadric = gluNewQuadric();
     gluQuadricDrawStyle(quadric, GLU_FILL);
     gluQuadricNormals(quadric, GLU_SMOOTH);
-    GLfloat color[] = { sphere.color.r, sphere.color.g, sphere.color.b };
+    GLfloat color[] = { (GLfloat) sphere.color.r, (GLfloat) sphere.color.g,
+                        (GLfloat) sphere.color.b };
     glMaterialfv(GL_FRONT, GL_DIFFUSE, color);
     glLoadIdentity();
     glTranslatef(sphere.origin.x, sphere.origin.y, sphere.origin.z);
@@ -35,7 +36,8 @@ void GLUTRasterizer::visit(Sphere& sphere) {
 }
 
 void GLUTRasterizer::visit(Triangle3& triangle) {
-    GLfloat color[] = { triangle.color.r, triangle.color.g, triangle.color.b };
+    GLfloat color[] = { (GLfloat) triangle.color.r, (GLfloat) triangle.color.g,
+                        (GLfloat) triangle.color.b };
     glMaterialfv(GL_FRONT, GL_DIFFUSE, color);
 
     glLoadIdentity();
@@ -47,7 +49,8 @@ void GLUTRasterizer::visit(Triangle3& triangle) {
 }
 
 void GLUTRasterizer::visit(TriangleList& ts) {
-    GLfloat color[] = { ts.color.r, ts.color.g, ts.color.b };
+    const GLfloat color[] = { (GLfloat) ts.color.r, (GLfloat) ts.color.g,
+                              (GLfloat) ts.color.b };
     glMaterialfv(GL_FRONT, GL_DIFFUSE, color);
 
     glLoadIdentity();
@@ -92,7 +95,8 @@ void GLUTRenderer::render(GLXViewportWindow& viewport, const Camera& camera,
 //              0., 1., 0.);
 
     glEnable(GL_LIGHTING);
-    GLfloat light_position[] = { light.x, light.y, light.z, 1 };
+    GLfloat light_position[] = { (GLfloat) light.x, (GLfloat) light.y,
+                                 (GLfloat) light.z, 1 };
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
     glEnable(GL_LIGHT0);
 
